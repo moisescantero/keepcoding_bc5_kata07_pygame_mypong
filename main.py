@@ -14,7 +14,7 @@ class Ball:
         self.Cy = 300#coordenada inicial y para la bola
         self.h = 20
         self.w = 20
-        self.image = pg.Surface((20, 20))
+        self.image = pg.Surface((self.w, self.h))
         self.image.fill(YELLOW)
 
     @property
@@ -35,6 +35,26 @@ class Ball:
         self.Cx += self.vx#coordenada incial más velocidad x de la bola
         self.Cy += self.vy
 
+class Raquet:
+    def __init__(self):
+        self.vx = 0#velocidad desplazamiento de la bola para coordenada x
+        self.vy = 5#velocidad desplazamiento de la bola para coordenada y
+        self.w = 25
+        self.h = 100
+        self.Cx = 30#coordenada inicial x para la bola
+        self.Cy = 300#coordenada inicial x para la bola
+
+        
+        self.image = pg.Surface((self.w, self.h))
+        self.image.fill((255,255,255))
+
+    @property
+    def posx(self):
+        return self.Cx - self.w // 2#para calcular el centro real
+  
+    @property
+    def posy(self):
+        return self.Cy - self.h // 2#para calcular el centro real
 
 
 class Game:#clase juego
@@ -44,6 +64,7 @@ class Game:#clase juego
         self.fondo = pg.image.load("./resources/images/fondo.jpg")
         self.pantalla.blit(self.fondo, (0 , 0))#pintar el fondo del juego
         self.ball = Ball()
+        self.playerOne = Raquet()
 
         pg.display.set_caption("Pong")#asignar nombre Pong a la pantalla
 
@@ -55,9 +76,23 @@ class Game:#clase juego
                 if event.type == QUIT:#si evento es pulsar la X de la ventana
                     game_over = True#variable contro salida de bucle es True
             
+                if event.type == KEYDOWN:
+                    if event.key == K_w:
+                        self.playerOne.Cy -= self.playerOne.vy
+                    if event.key == K_z:
+                        self.playerOne.Cy += self.playerOne.vy
+
+            key_pressed = pg.key.get_pressed()
+            if key_pressed[K_w]:
+                self.playerOne.Cy -= self.playerOne.vy
+            if key_pressed[K_z]:
+                self.playerOne.Cy += self.playerOne.vy
+
 
             self.pantalla.blit(self.fondo, (0 , 0))#pintar el fondo del juego
             self.pantalla.blit(self.ball.image, (self.ball.posx, self.ball.posy))#pintar la bola dando imagen, posición x y posición y
+            self.pantalla.blit(self.playerOne.image, (self.playerOne.posx, self.playerOne.posy))
+
 
             self.ball.move(800,600)
             pg.display.flip()#pintar/actualizar pantalla
