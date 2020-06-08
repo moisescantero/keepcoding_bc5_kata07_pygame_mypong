@@ -33,3 +33,5 @@ while True:
 pygame.quit()#cierra pygame
 sys.exit()#usar salida del sistema operativo para cerrar ventana
 
+
+
