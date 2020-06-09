@@ -56,6 +56,17 @@ class Raquet:
     def posy(self):
         return self.Cy - self.h // 2#para calcular el centro real
 
+    def move(self, limSupY):
+        self.Cx += self.vx
+        self.Cy += self.vy
+
+        #version genis
+        if self.Cy < self.h // 2:
+            self.Cy = self.h // 2
+
+        if self.Cy >= limSupY - self.h // 2:
+            self.Cy = limSupY - self.h // 2
+        
 
 class Game:#clase juego
     def __init__(self):#método init
@@ -78,23 +89,25 @@ class Game:#clase juego
             
                 if event.type == KEYDOWN:
                     if event.key == K_w:
-                        self.playerOne.Cy -= self.playerOne.vy
+                        self.playerOne.vy = -5
                     if event.key == K_z:
-                        self.playerOne.Cy += self.playerOne.vy
+                        self.playerOne.vy = 5
 
             key_pressed = pg.key.get_pressed()
             if key_pressed[K_w]:
-                self.playerOne.Cy -= self.playerOne.vy
-            if key_pressed[K_z]:
-                self.playerOne.Cy += self.playerOne.vy
-
+                self.playerOne.vy = -5
+            elif key_pressed[K_z]:
+                self.playerOne.vy = 5
+            else:
+                self.playerOne.vy = 0
 
             self.pantalla.blit(self.fondo, (0 , 0))#pintar el fondo del juego
             self.pantalla.blit(self.ball.image, (self.ball.posx, self.ball.posy))#pintar la bola dando imagen, posición x y posición y
             self.pantalla.blit(self.playerOne.image, (self.playerOne.posx, self.playerOne.posy))
 
 
-            self.ball.move(800,600)
+            self.ball.move(800, 600)
+            self.playerOne.move(800, 600)
             pg.display.flip()#pintar/actualizar pantalla
 
 
