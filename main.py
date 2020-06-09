@@ -36,12 +36,12 @@ class Ball:
         self.Cy += self.vy
 
 class Raquet:
-    def __init__(self):
+    def __init__(self, Cx):
         self.vx = 0#velocidad desplazamiento de la bola para coordenada x
         self.vy = 5#velocidad desplazamiento de la bola para coordenada y
         self.w = 25
         self.h = 100
-        self.Cx = 30#coordenada inicial x para la bola
+        self.Cx = Cx#coordenada inicial x para la bola
         self.Cy = 300#coordenada inicial x para la bola
 
         
@@ -56,7 +56,7 @@ class Raquet:
     def posy(self):
         return self.Cy - self.h // 2#para calcular el centro real
 
-    def move(self, limSupY):
+    def move(self, limSupX, limSupY):
         self.Cx += self.vx
         self.Cy += self.vy
 
@@ -75,7 +75,8 @@ class Game:#clase juego
         self.fondo = pg.image.load("./resources/images/fondo.jpg")
         self.pantalla.blit(self.fondo, (0 , 0))#pintar el fondo del juego
         self.ball = Ball()
-        self.playerOne = Raquet()
+        self.playerOne = Raquet(30)
+        self.playerTwo = Raquet(770)
 
         pg.display.set_caption("Pong")#asignar nombre Pong a la pantalla
 
@@ -86,13 +87,13 @@ class Game:#clase juego
             for event in pg.event.get():#para cada evento compruebas
                 if event.type == QUIT:#si evento es pulsar la X de la ventana
                     game_over = True#variable contro salida de bucle es True
-            
+                """
                 if event.type == KEYDOWN:
                     if event.key == K_w:
                         self.playerOne.vy = -5
                     if event.key == K_z:
                         self.playerOne.vy = 5
-
+                """
             key_pressed = pg.key.get_pressed()
             if key_pressed[K_w]:
                 self.playerOne.vy = -5
@@ -101,13 +102,24 @@ class Game:#clase juego
             else:
                 self.playerOne.vy = 0
 
+
+            if key_pressed[K_UP]:
+                self.playerTwo.vy = -5
+            elif key_pressed[K_DOWN]:
+                self.playerTwo.vy = 5
+            else:
+                self.playerTwo.vy = 0
+
             self.pantalla.blit(self.fondo, (0 , 0))#pintar el fondo del juego
             self.pantalla.blit(self.ball.image, (self.ball.posx, self.ball.posy))#pintar la bola dando imagen, posición x y posición y
-            self.pantalla.blit(self.playerOne.image, (self.playerOne.posx, self.playerOne.posy))
+            self.pantalla.blit(self.playerOne.image, (self.playerOne.posx, self.playerOne.posy))#pintar raqueta player one
+            self.pantalla.blit(self.playerTwo.image, (self.playerTwo.posx, self.playerTwo.posy))#pintar raqueta player two
 
 
             self.ball.move(800, 600)
             self.playerOne.move(800, 600)
+            self.playerTwo.move(800, 600)
+
             pg.display.flip()#pintar/actualizar pantalla
 
 
