@@ -1,8 +1,7 @@
 import pygame as pg 
 from pygame.locals import *
-import sys
-import random
-from entities import *
+import sys, random
+from sprites import *
 
 BACKGROUND = (0,240,0)#CONSTANTE PARA MODIFICAR COLOR DE FONDO
 YELLOW = (255, 255, 0)
@@ -83,17 +82,17 @@ class Game:#clase juego
         while not game_over:
             game_over = self.handleEvent()
 
-            self.ball.move(800, 600)
-            self.playerOne.move(800, 600)
-            self.playerTwo.move(800, 600)
+            self.ball.update(600)
+            self.playerOne.update(600)
+            self.playerTwo.update(600)
             self.ball.comprobarChoque(self.playerOne)
             self.ball.comprobarChoque(self.playerTwo)
 
             if self.ball.vx == 0 and self.ball.vy == 0:
-                if self.ball.Cx >= 800:
+                if self.ball.rect.centerx >= 800:
                     self.scoreOne += 1
                     self.marcadorOne = self.font.render(str(self.scoreOne), True, WHITE)
-                if self.ball.Cx <= 0:
+                if self.ball.rect.centerx <= 0:
                     self.scoreTwo += 1
                     self.marcadorTwo = self.font.render(str(self.scoreTwo), True, WHITE)
 
@@ -104,9 +103,9 @@ class Game:#clase juego
 
 
             self.pantalla.blit(self.fondo, (0 , 0))#pintar el fondo del juego
-            self.pantalla.blit(self.ball.image, (self.ball.posx, self.ball.posy))#pintar la bola dando imagen, posición x y posición y
-            self.pantalla.blit(self.playerOne.image, (self.playerOne.posx, self.playerOne.posy))#pintar raqueta player one
-            self.pantalla.blit(self.playerTwo.image, (self.playerTwo.posx, self.playerTwo.posy))#pintar raqueta player two
+            self.pantalla.blit(self.ball.image, (self.ball.rect.x, self.ball.rect.y))#pintar la bola dando imagen, posición x y posición y
+            self.pantalla.blit(self.playerOne.image, (self.playerOne.rect.x, self.playerOne.rect.y))#pintar raqueta player one
+            self.pantalla.blit(self.playerTwo.image, (self.playerTwo.rect.x, self.playerTwo.rect.y))#pintar raqueta player two
             self.pantalla.blit(self.marcadorOne, (20, 10))
             self.pantalla.blit(self.marcadorTwo, (760, 10))
             pg.display.flip()#pintar/actualizar pantalla
